@@ -5,3 +5,4 @@ ALTER TABLE book
 ALTER TABLE book
     ADD CONSTRAINT FK_author_id
         FOREIGN KEY (author_id) REFERENCES author (id);
+

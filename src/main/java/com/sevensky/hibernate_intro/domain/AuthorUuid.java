@@ -1,31 +1,31 @@
 package com.sevensky.hibernate_intro.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
 
-import java.util.HashSet;
+import java.sql.Types;
 import java.util.Objects;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
-public class Author {
-
-    public Author( String firstName, String lastName) {
+public class AuthorUuid {
+    public AuthorUuid( String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JdbcTypeCode(value = Types.VARCHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)",updatable = false,nullable = false)
+    private UUID id;
 
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Book> books = new HashSet<>();
 
     private String firstName;
     private String lastName;
 
-    public Author() {
+    public AuthorUuid() {
 
     }
 
@@ -34,7 +34,7 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Author author = (Author) o;
+        AuthorUuid author = (AuthorUuid) o;
 
         return Objects.equals(id, author.id);
     }
@@ -60,11 +60,11 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 }

@@ -1,8 +1,10 @@
 package com.sevensky.hibernate_intro.bootstrap;
 
 import com.sevensky.hibernate_intro.domain.Author;
+import com.sevensky.hibernate_intro.domain.AuthorUuid;
 import com.sevensky.hibernate_intro.domain.Book;
 import com.sevensky.hibernate_intro.repositories.AuthorRepository;
+import com.sevensky.hibernate_intro.repositories.AuthorUuidRepository;
 import com.sevensky.hibernate_intro.repositories.BookRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -14,10 +16,12 @@ public class DataInitializer implements CommandLineRunner {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final AuthorUuidRepository authorUuidRepository;
 
-    public DataInitializer(BookRepository bookRepository,AuthorRepository authorRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository, AuthorUuidRepository authorUuidRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.authorUuidRepository = authorUuidRepository;
     }
 
     @Override
@@ -40,6 +44,11 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Book Id: "+book.getId());
             System.out.println("Book Name: "+book.getTitle());
         });
+
+        AuthorUuid authorUuid=new AuthorUuid("First","Last");
+        AuthorUuid authorUuidSaved=authorUuidRepository.save(authorUuid);
+        System.out.println("Author "+authorUuidSaved.getId());
+
 
     }
 }
