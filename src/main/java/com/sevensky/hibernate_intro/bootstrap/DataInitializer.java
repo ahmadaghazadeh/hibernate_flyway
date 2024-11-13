@@ -3,9 +3,11 @@ package com.sevensky.hibernate_intro.bootstrap;
 import com.sevensky.hibernate_intro.domain.Author;
 import com.sevensky.hibernate_intro.domain.AuthorUuid;
 import com.sevensky.hibernate_intro.domain.Book;
-import com.sevensky.hibernate_intro.repositories.AuthorRepository;
-import com.sevensky.hibernate_intro.repositories.AuthorUuidRepository;
-import com.sevensky.hibernate_intro.repositories.BookRepository;
+import com.sevensky.hibernate_intro.domain.BookUuid;
+import com.sevensky.hibernate_intro.domain.compose.AuthorCompose;
+import com.sevensky.hibernate_intro.domain.compose.AuthorEmbedded;
+import com.sevensky.hibernate_intro.domain.compose.NameId;
+import com.sevensky.hibernate_intro.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,18 @@ public class DataInitializer implements CommandLineRunner {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final AuthorComposeRepository authorComposeRepository;
+    private final AuthorEmneddedRepository authorEmneddedRepository;
     private final AuthorUuidRepository authorUuidRepository;
+    private final BookUuidRepository bookUuidRepository;
 
-    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository, AuthorUuidRepository authorUuidRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository, AuthorComposeRepository authorComposeRepository, AuthorEmneddedRepository authorEmneddedRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.authorComposeRepository = authorComposeRepository;
+        this.authorEmneddedRepository = authorEmneddedRepository;
         this.authorUuidRepository = authorUuidRepository;
+        this.bookUuidRepository = bookUuidRepository;
     }
 
     @Override
@@ -50,5 +58,16 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Author "+authorUuidSaved.getId());
 
 
+        BookUuid bookUuid=new BookUuid("First","Last","Ahmad");
+        BookUuid bookUuidSaved=bookUuidRepository.save(bookUuid);
+        System.out.println("Book "+bookUuidSaved.getId());
+
+        AuthorCompose authorCompose=new AuthorCompose("First","Last");
+        AuthorCompose authorComposeSaved=authorComposeRepository.save(authorCompose);
+        System.out.println("AuthorCompose "+authorComposeSaved.getFirstName() + " " + authorComposeSaved.getLastName());
+
+        AuthorEmbedded authorEmbedded=new AuthorEmbedded(new NameId("First","Last"));
+        AuthorEmbedded authorEmbeddedSaved=authorEmneddedRepository.save(authorEmbedded);
+        System.out.println("AuthorCompose "+authorEmbeddedSaved.getNameId().getFirstName() + " " + authorEmbeddedSaved.getNameId().getLastName() );
     }
 }
